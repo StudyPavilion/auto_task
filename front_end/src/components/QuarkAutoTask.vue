@@ -1,4 +1,7 @@
 <template>
+
+  <el-backtop :right="100" :bottom="100" />
+
   <div class="common-layout">
     <el-container>
       <el-aside width="200px">Aside</el-aside>
@@ -10,13 +13,13 @@
               <div v-for="(user, index) in userList" :key="index">
                 <!-- <template> -->
                 <hr>
-                <el-row justify="start">
+                <el-row justify="end">
 
-                  <el-col :span="6">
+                  <el-col :span="12">
                     <span>用户{{ index + 1 }}</span>
                   </el-col>
 
-                  <el-col :span="6">
+                  <el-col :span="12">
                     <el-button type="primary" @click="runScriptNow(index)">
                       <el-icon style="vertical-align: middle">
                         <Edit />
@@ -33,7 +36,7 @@
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-input v-model="userList[index].kps" clearable style="max-width: 600px" >
+                  <el-input v-model="userList[index].kps" clearable style="max-width: 600px">
                     <template #prepend>kps</template>
                   </el-input>
                 </el-row>
