@@ -1,6 +1,8 @@
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import SvgIcon from './components/SvgIcon.vue'
+import './assets/iconfont/iconfont.js';
 
 import { createApp } from 'vue'
 
@@ -13,6 +15,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.use(ElementPlus)
+
+app.component('SvgIcon', SvgIcon);
 
 app.mount('#app')
 
