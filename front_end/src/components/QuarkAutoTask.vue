@@ -147,62 +147,6 @@
                     <el-button type="primary" @click="onSubmit()">Create</el-button>
                     <el-button>Cancel</el-button>
                   </el-form-item>
-                  <div v-for="(user, index) in softwareConfig.userList" :key="index">
-                    <!-- <template> -->
-                    <hr />
-                    <el-row justify="space-between">
-                      <el-col :span="3">
-                        <span>用户{{ index + 1 }}</span>
-                      </el-col>
-                      <el-col :span="21">
-                        <el-row justify="end">
-                          <el-button-group>
-                            <el-button type="primary" @click="runScriptNow(index)">
-                              <el-icon style="vertical-align: middle">
-                                <Edit />
-                              </el-icon>
-                              <span style="vertical-align: middle">立即执行</span>
-                            </el-button>
-
-                            <el-button type="danger" @click="removeUser(index)">
-                              <el-icon style="vertical-align: middle">
-                                <Delete />
-                              </el-icon>
-                              <span style="vertical-align: middle">删除用户</span>
-                            </el-button>
-                          </el-button-group>
-                        </el-row>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-input v-model="softwareConfig.userList[index].kps" clearable style="min-width: 400px"
-                        placeholder="Please input">
-                        <template #prepend>kps</template>
-                      </el-input>
-                    </el-row>
-
-                    <el-row>
-                      <el-input v-model="softwareConfig.userList[index].sign" clearable style="min-width: 400px"
-                        placeholder="Please input">
-                        <template #prepend>sign</template>
-                      </el-input>
-                    </el-row>
-
-                    <el-row>
-                      <el-input v-model="softwareConfig.userList[index].vcode" clearable style="min-width: 400px"
-                        placeholder="Please input">
-                        <template #prepend>vcode</template>
-                      </el-input>
-                    </el-row>
-
-                    <!-- </template> -->
-                  </div>
-                  <el-button type="primary" @click="addUser">
-                    <el-icon style="vertical-align: middle">
-                      <Plus />
-                    </el-icon>
-                    <span style="vertical-align: middle">增加用户</span>
-                  </el-button>
                 </el-form>
               </el-main>
             </el-scrollbar>
