@@ -135,6 +135,14 @@
                       </el-input>
                     </el-form-item>
                   </div>
+                <el-form-item>
+                  <el-button type="primary" @click="addUser">
+                    <el-icon>
+                      <Plus />
+                    </el-icon>
+                    <span >新增用户</span>
+                  </el-button>
+                </el-form-item>
                   <el-form-item>
                     <el-button type="primary" @click="onSubmit()">Create</el-button>
                     <el-button>Cancel</el-button>
