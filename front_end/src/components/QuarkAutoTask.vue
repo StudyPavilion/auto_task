@@ -101,9 +101,6 @@
             <el-scrollbar>
               <el-main>
                 <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
-                  <el-form-item label="Activity name">
-                    <el-input />
-                  </el-form-item>
                   <div v-for="(user, index) in softwareConfig.userList" :key="index">
                     <el-form-item :label="'用户' + (softwareConfig.userList[index].name)">
                       <el-button-group>
@@ -135,17 +132,13 @@
                       </el-input>
                     </el-form-item>
                   </div>
-                <el-form-item>
-                  <el-button type="primary" @click="addUser">
-                    <el-icon>
-                      <Plus />
-                    </el-icon>
-                    <span >新增用户</span>
-                  </el-button>
-                </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="onSubmit()">Create</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button type="primary" @click="addUser">
+                      <el-icon>
+                        <Plus />
+                      </el-icon>
+                      <span>新增用户</span>
+                    </el-button>
                   </el-form-item>
                 </el-form>
               </el-main>
@@ -190,7 +183,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
 let software = "test";
 
-let { softwareConfig, saveSoftConfig, runScriptNow} = useTaskData(software);
+let { softwareConfig, saveSoftConfig, runScriptNow } = useTaskData(software);
 
 let newUser = reactive({
   name: "",
