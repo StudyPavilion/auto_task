@@ -12,13 +12,13 @@
               <img style="width: 100px" src="/favicon.ico" alt="Element logo" />
             </el-menu-item>
 
-          <el-menu-item>
-            <div>
-              <el-button type="" @click="toggleSidebarStatus()" style="margin-bottom: 20px">
-                点我{{ SidebarStatus }}
-              </el-button>
-            </div>
-          </el-menu-item>
+            <el-menu-item>
+              <div>
+                <el-button type="" @click="toggleSidebarStatus()" style="margin-bottom: 20px">
+                  点我{{ SidebarStatus }}
+                </el-button>
+              </div>
+            </el-menu-item>
 
             <div class="flex-grow" />
 
@@ -43,7 +43,7 @@
 
         <!-- 侧栏 -->
         <el-aside width="120px" height="400px">
-          <el-scrollbar >
+          <el-scrollbar>
             <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
               @close="handleClose">
               <el-menu-item index="1">
@@ -146,6 +146,7 @@
                 </el-form>
               </el-main>
             </el-scrollbar>
+
             <!-- 底栏 -->
             <el-footer>
               <!-- 将底栏固定在底部-->
@@ -159,7 +160,6 @@
               </el-affix>
             </el-footer>
           </el-container>
-
         </el-container>
       </el-container>
     </el-container>
