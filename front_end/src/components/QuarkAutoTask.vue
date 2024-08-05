@@ -42,8 +42,8 @@
       <el-container>
 
         <!-- 侧栏 -->
-        <el-aside width="120px" height="400px">
-          <el-scrollbar>
+        <el-aside width="120px">
+          <el-scrollbar height="75vh">
             <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
               @close="handleClose">
               <el-menu-item index="1">
@@ -101,7 +101,7 @@
           </el-header>
           <!-- 主要区域 -->
           <el-container>
-            <el-scrollbar height="400px">
+            <el-scrollbar height="75vh">
               <el-main>
                 <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <div v-for="(user, index) in softwareConfig.userList" :key="index">
