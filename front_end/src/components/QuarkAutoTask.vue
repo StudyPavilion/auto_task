@@ -100,9 +100,9 @@
           <el-container>
             <el-scrollbar>
               <el-main>
-                <el-form :model="softwareConfig" @submit.prevent="saveConfig()">
+                <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <el-form-item label="Activity name">
-                    <el-input v-model="softwareConfig.software" />
+                    <el-input />
                   </el-form-item>
                   <div v-for="(user, index) in softwareConfig.userList" :key="index">
                     <el-form-item :label="'用户' + (softwareConfig.userList[index].name)">
@@ -238,7 +238,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
 let software = "test";
 
-let { softwareConfig, saveSoftConfig} = useTaskData(software);
+let { softwareConfig, saveSoftConfig, runScriptNow} = useTaskData(software);
 
 let newUser = reactive({
   name: "",
@@ -277,42 +277,6 @@ function onSubmit() {
   console.log("form:", softwareConfig.software);
 }
 
-function runScriptNow(user_index: number) {
-  console.log("runScriptNow", user_index);
-  // 发起一个post请求
-  axios({
-    method: "post",
-    url: urlRunTask,
-    data: {
-      kps: softwareConfig.userList[user_index].kps,
-      sign: softwareConfig.userList[user_index].sign,
-      vcode: softwareConfig.userList[user_index].vcode,
-    },
-  }).then(
-    (response) => {
-      // console.log(response, response.data)
-      if (response.data["task_result"] === "success") {
-        ElMessage({
-          message: response.data,
-          type: "success",
-        });
-        // console.log("任务执行成功")
-      } else if (response.data["task_result"] === "error") {
-        ElMessage.error(response.data);
-        // console.log("任务执行失败")
-      } else {
-        console.log("未知错误");
-      }
-    },
-    (error) => {
-      console.log("错误", error.message);
-      ElMessage({
-        message: error.message,
-        type: "error",
-      });
-    }
-  );
-}
 </script>
 
 <style scoped>
