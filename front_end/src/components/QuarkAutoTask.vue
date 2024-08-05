@@ -40,7 +40,7 @@
                 点我{{ SidebarStatus }}
               </el-button>
             </div>
-            
+
             <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
               @close="handleClose">
               <el-menu-item index="1">
@@ -89,7 +89,7 @@
           </el-scrollbar>
         </el-aside>
 
-        <el-container style="min-width: 400px;">
+        <el-container label-width="auto" style="min-width: 400px;">
           <!-- 顶栏 -->
           <el-header>
             <el-row justify="center">
@@ -100,8 +100,46 @@
           <el-container>
             <el-scrollbar>
               <el-main>
-                <el-form>
-                  <div v-for="(user, index) in userList" :key="index">
+                <el-form :model="softwareConfig" @submit.prevent="saveConfig()">
+                  <el-form-item label="Activity name">
+                    <el-input v-model="softwareConfig.software" />
+                  </el-form-item>
+                  <div v-for="(user, index) in softwareConfig.userList" :key="index">
+                    <el-form-item :label="'用户' + (softwareConfig.userList[index].name)">
+                      <el-button-group>
+                        <el-button type="primary" @click="runScriptNow(index)">
+                          <el-icon style="vertical-align: middle">
+                            <Edit />
+                          </el-icon>
+                          <span style="vertical-align: middle">立即执行</span>
+                        </el-button>
+
+                        <el-button type="danger" @click="removeUser(index)">
+                          <el-icon style="vertical-align: middle">
+                            <Delete />
+                          </el-icon>
+                          <span style="vertical-align: middle">删除用户</span>
+                        </el-button>
+                      </el-button-group>
+                    </el-form-item>
+                    <el-form-item label="kps">
+                      <el-input v-model="softwareConfig.userList[index].kps" clearable placeholder="Please input">
+                      </el-input>
+                    </el-form-item>
+                    <el-form-item label="sign">
+                      <el-input v-model="softwareConfig.userList[index].sign" clearable placeholder="Please input">
+                      </el-input>
+                    </el-form-item>
+                    <el-form-item label="vcode">
+                      <el-input v-model="softwareConfig.userList[index].vcode" clearable placeholder="Please input">
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                  <el-form-item>
+                    <el-button type="primary" @click="onSubmit()">Create</el-button>
+                    <el-button>Cancel</el-button>
+                  </el-form-item>
+                  <div v-for="(user, index) in softwareConfig.userList" :key="index">
                     <!-- <template> -->
                     <hr />
                     <el-row justify="space-between">
@@ -129,21 +167,21 @@
                       </el-col>
                     </el-row>
                     <el-row>
-                      <el-input v-model="userList[index].kps" clearable style="min-width: 400px"
+                      <el-input v-model="softwareConfig.userList[index].kps" clearable style="min-width: 400px"
                         placeholder="Please input">
                         <template #prepend>kps</template>
                       </el-input>
                     </el-row>
 
                     <el-row>
-                      <el-input v-model="userList[index].sign" clearable style="min-width: 400px"
+                      <el-input v-model="softwareConfig.userList[index].sign" clearable style="min-width: 400px"
                         placeholder="Please input">
                         <template #prepend>sign</template>
                       </el-input>
                     </el-row>
 
                     <el-row>
-                      <el-input v-model="userList[index].vcode" clearable style="min-width: 400px"
+                      <el-input v-model="softwareConfig.userList[index].vcode" clearable style="min-width: 400px"
                         placeholder="Please input">
                         <template #prepend>vcode</template>
                       </el-input>
@@ -166,8 +204,8 @@
               <el-affix position="bottom" :offset="0">
                 <el-row justify="center" class="bottom-buttons">
                   <el-button-group>
-                    <el-button type="success">保存配置</el-button>
-                    <el-button type="primary">运行任务</el-button>
+                    <el-button type="success" @click="saveSoftConfig(softwareConfig)">保存配置</el-button>
+                    <el-button type="primary" @click="saveSoftConfig(softwareConfig)">运行任务</el-button>
                   </el-button-group>
                 </el-row>
               </el-affix>
@@ -198,17 +236,12 @@ const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
 
-let url_base = "http://127.0.0.1:5000";
-// 运行任务
-let run_task = "/run_task";
+let software = "test";
 
-let read_config = "/read_config";
-
-let url = url_base + read_config;
-let software = "quark";
-let { userList } = useTaskData({ url, software });
+let { softwareConfig, saveSoftConfig} = useTaskData(software);
 
 let newUser = reactive({
+  name: "",
   kps: "",
   sign: "",
   vcode: "",
@@ -225,16 +258,23 @@ function toggleSidebarStatus() {
 
 function addUser() {
   newUser = {
+    name: "",
     kps: "",
     sign: "",
     vcode: "",
   };
-  userList.push(newUser);
-  console.log(userList);
+  softwareConfig.userList.push(newUser);
+  console.log(softwareConfig.userList);
 }
 
 function removeUser(index: number) {
-  userList.splice(index, 1);
+  softwareConfig.userList.splice(index, 1);
+}
+
+function onSubmit() {
+  console.log("submit!");
+  console.log("form.name:",);
+  console.log("form:", softwareConfig.software);
 }
 
 function runScriptNow(user_index: number) {
@@ -242,11 +282,11 @@ function runScriptNow(user_index: number) {
   // 发起一个post请求
   axios({
     method: "post",
-    url: url_base + run_task,
+    url: urlRunTask,
     data: {
-      kps: userList[user_index].kps,
-      sign: userList[user_index].sign,
-      vcode: userList[user_index].vcode,
+      kps: softwareConfig.userList[user_index].kps,
+      sign: softwareConfig.userList[user_index].sign,
+      vcode: softwareConfig.userList[user_index].vcode,
     },
   }).then(
     (response) => {
