@@ -3,7 +3,7 @@
   <el-backtop :right="100" :bottom="100" />
 
   <div class="common-layout">
-    <el-container style="height: 100vh">
+    <el-container>
       <el-header>
         <!-- 将顶部菜单固定在顶部 -->
         <el-affix :offset="0">
@@ -11,6 +11,15 @@
             <el-menu-item index="0">
               <img style="width: 100px" src="/favicon.ico" alt="Element logo" />
             </el-menu-item>
+
+          <el-menu-item>
+            <div>
+              <el-button type="" @click="toggleSidebarStatus()" style="margin-bottom: 20px">
+                点我{{ SidebarStatus }}
+              </el-button>
+            </div>
+          </el-menu-item>
+
             <div class="flex-grow" />
 
             <el-sub-menu index="1">
@@ -33,14 +42,8 @@
       <el-container>
 
         <!-- 侧栏 -->
-        <el-aside width="200px">
-          <el-scrollbar>
-            <div>
-              <el-button type="" @click="toggleSidebarStatus()" style="margin-bottom: 20px">
-                点我{{ SidebarStatus }}
-              </el-button>
-            </div>
-
+        <el-aside width="120px" height="400px">
+          <el-scrollbar >
             <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
               @close="handleClose">
               <el-menu-item index="1">
@@ -98,7 +101,7 @@
           </el-header>
           <!-- 主要区域 -->
           <el-container>
-            <el-scrollbar>
+            <el-scrollbar height="400px">
               <el-main>
                 <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <div v-for="(user, index) in softwareConfig.userList" :key="index">
