@@ -1,7 +1,7 @@
 import { reactive, onMounted, ref } from 'vue'
 import axios, { AxiosError } from 'axios'
 import { useUrlStore } from '@/store/url'
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 /**
  * @description 用户列表
  * @param {String} name 用户名
@@ -93,14 +93,14 @@ export default function (software: string) {
         }
     }
 
-    async function saveSoftConfig(config: any) {
+    async function saveSoftConfig(softwareConfig: softwareConfig) {
         try {
 
             // 发请求
             const { data, status } = await axios({
                 method: 'post',
                 url: urlStore.urlSaveConfig,
-                data: config
+                data: softwareConfig
             })
             console.log("data: ", data, "status: ", status)
 
@@ -109,8 +109,6 @@ export default function (software: string) {
             const err = <AxiosError>error
             console.log(err.message)
         }
-
-
     }
 
     async function runScriptNow(user_index: number) {
@@ -129,14 +127,16 @@ export default function (software: string) {
                 // console.log(response, response.data)
                 if (response.data["task_result"] === "success") {
                     ElMessage({
-                        message: response.data,
+                        message: response.data.log,
                         type: "success",
                     });
                     // console.log("任务执行成功")
                 } else if (response.data["task_result"] === "error") {
-                    ElMessage.error(response.data);
                     console.log("任务执行失败")
-                    // console.log(response)
+                    console.log(response)
+                    ElMessageBox.alert(response.data.log, '错误', {
+                        confirmButtonText: '我已了解',
+                      })
                 } else {
                     console.log("未知错误");
                 }
