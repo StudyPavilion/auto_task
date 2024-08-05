@@ -154,7 +154,7 @@
                 <el-row justify="center" class="bottom-buttons">
                   <el-button-group>
                     <el-button type="success" @click="saveSoftConfig(softwareConfig)">保存配置</el-button>
-                    <el-button type="primary" @click="saveSoftConfig(softwareConfig)">运行任务</el-button>
+                    <el-button type="primary" @click="runTaskAll(softwareConfig)">运行任务</el-button>
                   </el-button-group>
                 </el-row>
               </el-affix>
@@ -186,7 +186,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
 let software = "test";
 
-let { softwareConfig, saveSoftConfig, runScriptNow } = useTaskData(software);
+let { softwareConfig, saveSoftConfig, runScriptNow, runTaskAll } = useTaskData(software);
 
 let newUser = reactive({
   name: "",

@@ -114,7 +114,7 @@ export default function (software: string) {
     }
 
     async function runScriptNow(user_index: number) {
-        console.log("runScriptNow", user_index);
+        // console.log("runScriptNow", user_index);
         // 发起一个post请求
         axios({
             method: "post",
@@ -135,7 +135,8 @@ export default function (software: string) {
                     // console.log("任务执行成功")
                 } else if (response.data["task_result"] === "error") {
                     ElMessage.error(response.data);
-                    // console.log("任务执行失败")
+                    console.log("任务执行失败")
+                    // console.log(response)
                 } else {
                     console.log("未知错误");
                 }
@@ -150,11 +151,19 @@ export default function (software: string) {
         );
     }
 
+    async function runTaskAll(softwareConfig: softwareConfig) {
+        console.log("runTaskAll");
+        for (let i = 0; i < softwareConfig.userList.length; i++) {
+            console.log("runTaskAll", i);
+            runScriptNow(i)
+        }
+    }
+
     // 挂载钩子
     onMounted(() => {
         getSoftwareConfig(software)
     })
 
     //向外部暴露数据
-    return { softwareConfig, getSoftwareConfig, saveSoftConfig, runScriptNow }
+    return { softwareConfig, getSoftwareConfig, saveSoftConfig, runScriptNow, runTaskAll }
 }
