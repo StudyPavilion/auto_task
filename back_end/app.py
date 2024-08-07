@@ -102,12 +102,12 @@ def run_task():  # put application's code here
         json_data = request.get_json()
         print(json_data)
 
-        kps = json_data['kps']
-        sign = json_data['sign']
-        vcode = json_data['vcode']
+        # kps = json_data['kps']
+        # sign = json_data['sign']
+        # vcode = json_data['vcode']
 
-        account = kps + "&" + sign + "&" + vcode
-        summary_message = quark_auto_task(account)
+        # account = kps + "&" + sign + "&" + vcode
+        summary_message = quark_auto_task(json_data)
         return summary_message
     elif request.method == 'GET':
         return "不支持GET请求，请使用POST进行请求"
@@ -165,6 +165,6 @@ def reload_tasks(task_path, config_path):
 
 
 if __name__ == "__main__":
-    reload_tasks(quark_task, quark_config)
+    # reload_tasks(quark_task, quark_config)
     app.run(debug=True)
     # quark_auto_task()

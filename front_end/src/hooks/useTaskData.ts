@@ -143,11 +143,7 @@ export default function (software: string) {
         axios({
             method: "post",
             url: urlStore.urlRunTask,
-            data: {
-                kps: softwareConfig.userList[user_index].kps,
-                sign: softwareConfig.userList[user_index].sign,
-                vcode: softwareConfig.userList[user_index].vcode,
-            },
+            data: softwareConfig.userList[user_index]
         }).then(
             (response) => {
                 // console.log(response, response.data)
@@ -179,10 +175,37 @@ export default function (software: string) {
 
     async function runTaskAll(softwareConfig: softwareConfig) {
         console.log("runTaskAll");
-        for (let i = 0; i < softwareConfig.userList.length; i++) {
-            console.log("runTaskAll", i);
-            runScriptNow(i)
-        }
+        axios({
+            method: "post",
+            url: urlStore.urlRunTask,
+            data: softwareConfig.userList
+        }).then(
+            (response) => {
+                // console.log(response, response.data)
+                if (response.data["task_result"] === "success") {
+                    ElMessage({
+                        message: response.data.log,
+                        type: "success",
+                    });
+                    // console.log("任务执行成功")
+                } else if (response.data["task_result"] === "error") {
+                    console.log("任务执行失败")
+                    console.log(response)
+                    ElMessageBox.alert(response.data.log, '错误', {
+                        confirmButtonText: '我已了解',
+                    })
+                } else {
+                    console.log("未知错误");
+                }
+            },
+            (error) => {
+                console.log("错误", error.message);
+                ElMessage({
+                    message: error.message,
+                    type: "error",
+                });
+            }
+        );
     }
 
     // 挂载钩子

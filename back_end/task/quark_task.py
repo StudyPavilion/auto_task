@@ -3,9 +3,8 @@ import json
 import time
 
 
-def get_query(url):
-    u = url.split("&")
-    return f"__t={int(time.time() * 1000)}&sign_cyclic=true&fr=android&kps={u[0]}&sign={u[1]}&vcode={u[2]}&pr=ucpro&uc_param_str="
+def get_query(account):
+    return f"__t={int(time.time() * 1000)}&sign_cyclic=true&fr=android&kps={account["kps"]}&sign={account["sign"]}&vcode={account["vcode"]}&pr=ucpro&uc_param_str="
 
 
 def check_request_response(response):
@@ -59,31 +58,30 @@ def quark_auto_task(account):
     :param account: 账号信息，包含kps, sign, vcode
     :return: 签到结果
     """
-    task_result = "success"
-    # 定义多个 账号，每个 账号 带有名称作为键
-    account_list = {
-        # "账号1": "AASdlyqho8zVXQ4US7krPBSa7XacPrhyjZhFMWZMEE6DzaOXgNCO8MMENeLxEH52suoSqmMgOJ02p1HoGDt4%2BTVXsPCBfKmElYWgqItMvc8lBA%3D%3D&AARmhtoyIQTPvQB6JAKWDnomL%2Bs%2B2t4s9AARiQi341AXcJm%2B%2Bk0j1J2Qr7hPeD5HI68%3D&1722327010080",
-        "账号2": account,
-        # 继续添加更多 账号
-    }
+    account_list = []
+    print("accounts:", account, type(account_list))
+    # 判断是否为 account 是否为 字典类型，如果是，加入account_list
+    if isinstance(account,dict):
+        account_list.append(account)
+    else:
+        account_list = account
 
     # 定义用于存储签到结果的字典
     sign_results = {"task_result": "", "log": {}}
 
-    # 循环遍历每个 url 并调用签到函数
-    for name, account in account_list.items():
-        print(f"正在签到 {name} ...")
+    # 循环遍历每个 account 并调用签到函数
+    for account in account_list:
+        print(f"正在签到 {account.get('name')} ...")
         sign_message = quark_sign_in(account)
-
         if sign_message:
-            sign_results["log"][name] = sign_message
+            sign_results["log"][account["name"]] = sign_message
             sign_results["task_result"] = "success"
         else:
             # sign_results[name] = "签到失败"
             # notify.send("夸克盘签到异常", f"{name} 的签到失败!")
-            sign_results["log"][name] = "签到失败"
+            sign_results["log"][account["name"]] = "签到失败"
             sign_results["task_result"] = "error"
-            print("夸克盘签到异常", f"{name} 的签到失败!")
+            print("夸克盘签到异常", f"{account["name"]} 的签到失败!")
 
     # 输出所有账户的签到结果
     print("\n签到结果：")
