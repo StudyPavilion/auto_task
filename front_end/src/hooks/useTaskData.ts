@@ -178,6 +178,7 @@ export default function (software: string) {
     }
 
     async function runTaskAll(softwareConfig: softwareConfig) {
+        saveSoftConfig(softwareConfig)
         console.log("runTaskAll");
         for (let i = 0; i < softwareConfig.userList.length; i++) {
             console.log("runTaskAll", i);
