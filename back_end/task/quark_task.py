@@ -1,6 +1,15 @@
+import logging
+
 import requests
 import json
 import time
+import os
+import sys
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.append('..')
+from utils.common import read_json
+
+quark_config = "../task_config/quark_config.json"
 
 
 def get_query(account):
@@ -21,10 +30,10 @@ def quark_sign_in(url):
 
     # 获取签到状态
     state_response = requests.get(state_url)
-    print("state_response", state_response)
+    # print("state_response", state_response)
     # 检查请求状态
     response_data = check_request_response(state_response)
-    print("response_data", response_data)
+    # print("response_data", response_data)
     if not response_data:
         return False
 
@@ -34,7 +43,7 @@ def quark_sign_in(url):
         number = sign["sign_daily_reward"] / (1024 * 1024)
         progress = round(sign["sign_progress"] / sign["sign_target"] * 100, 2)
         message = f"今日已签到获取{number}MB，进度{progress}%"
-        print(message)
+        # print(message)
         return message
 
     # 执行签到
@@ -48,7 +57,7 @@ def quark_sign_in(url):
         return None
 
     mb = data_response["data"]["sign_daily_reward"] / (1024 * 1024)
-    print(json.dumps(data_response))
+    # print(json.dumps(data_response))
     return f"签到成功，获取到{mb}MB!"
 
 
@@ -59,9 +68,9 @@ def quark_auto_task(account):
     :return: 签到结果
     """
     account_list = []
-    print("accounts:", account, type(account_list))
+    # print("accounts:", account, type(account_list))
     # 判断是否为 account 是否为 字典类型，如果是，加入account_list
-    if isinstance(account,dict):
+    if isinstance(account, dict):
         account_list.append(account)
     else:
         account_list = account
@@ -71,7 +80,7 @@ def quark_auto_task(account):
 
     # 循环遍历每个 account 并调用签到函数
     for account in account_list:
-        print(f"正在签到 {account.get('name')} ...")
+        logging.info(f"正在签到 {account.get('name')} ...")
         sign_message = quark_sign_in(account)
         if sign_message:
             sign_results["log"][account["name"]] = sign_message
@@ -82,27 +91,15 @@ def quark_auto_task(account):
             sign_results["log"][account["name"]] = "签到失败"
             sign_results["task_result"] = "error"
             print("夸克盘签到异常", f"{account["name"]} 的签到失败!")
-
-    # 输出所有账户的签到结果
-    print("\n签到结果：")
-    for name, message in sign_results.items():
-        print(f"{name}: {message}")
-
-    # 汇总所有签到信息
-    summary_message = "\n".join(
-        [f"{name}: {message}" for name, message in sign_results.items()])
-
-    # 使用 notify.send 发送汇总信息通知
-    # notify.send("夸克盘签到汇总", summary_message)
-    print("夸克盘签到汇总", summary_message)
-    print("sign_results", sign_results)
+    print("签到汇总", sign_results)
     return sign_results
 
 
 def main():
     print('quark_task.py is running')
-    account = "AASdlyqho8zVXQ4US7krPBSa7XacPrhyjZhFMWZMEE6DzaOXgNCO8MMENeLxEH52suoSqmMgOJ02p1HoGDt4%2BTVXsPCBfKmElYWgqItMvc8lBA%3D%3D&AARmhtoyIQTPvQB6JAKWDnomL%2Bs%2B2t4s9AARiQi341AXcJm%2B%2Bk0j1J2Qr7hPeD5HI68%3D&1722327010080"
-    quark_auto_task(account)
+    data = read_json(quark_config)
+    account_list = data["userList"]
+    quark_auto_task(account_list)
 
 
 if __name__ == '__main__':

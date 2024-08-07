@@ -174,6 +174,7 @@ export default function (software: string) {
     }
 
     async function runTaskAll(softwareConfig: softwareConfig) {
+        saveSoftConfig(softwareConfig)
         console.log("runTaskAll");
         axios({
             method: "post",

@@ -14,6 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from utils.common import read_json, get_os_type, get_python_command
 from task.quark_task import quark_auto_task
 
+
 app = Flask(__name__)
 # 解决跨域问题
 CORS(app)
@@ -24,7 +25,7 @@ test_config = "task_config/test_config.json"
 test_task = "task/test_task.py"
 quark_task = "task/quark_task.py"
 
-DEBUG = True
+DEBUG = False
 
 logging.basicConfig(
     level=logging.DEBUG if DEBUG else logging.INFO,
@@ -101,12 +102,6 @@ def run_task():  # put application's code here
     if request.method == 'POST':
         json_data = request.get_json()
         print(json_data)
-
-        # kps = json_data['kps']
-        # sign = json_data['sign']
-        # vcode = json_data['vcode']
-
-        # account = kps + "&" + sign + "&" + vcode
         summary_message = quark_auto_task(json_data)
         return summary_message
     elif request.method == 'GET':
@@ -118,18 +113,25 @@ def run_python(args):
     os.system(f"{get_python_command()} {args}")
 
 
-def reload_tasks(task_path, config_path):
+def reload_tasks(software):
     """
     重载任务调度器
     :return:
     """
-    scheduler = BackgroundScheduler()
+    # scheduler = BackgroundScheduler()
+    crontab = None
     # 读取数据
-    data = read_json(config_path)
-    # 尝试从数据中获取名为"crontab"的键对应的值
-    crontab = data.get("crontab")
+    if software == "quark":
+        data = read_json(quark_config)
+        # 尝试从数据中获取名为"crontab"的键对应的值
+        crontab = data.get("crontab")
+    else:
+        logging.info("不支持{}配置定时任务".format(software))
+        return False
     # 如果成功获取到crontab，则继续执行
     if crontab:
+        data = read_json(quark_config)
+        account_list = data["userList"]
         # 如果调度器当前处于运行状态，则先暂停调度器
         if scheduler.state == 1:
             scheduler.pause()  # 暂停调度器
@@ -139,11 +141,13 @@ def reload_tasks(task_path, config_path):
         scheduler.remove_all_jobs()
         # 添加新的任务到调度器
         scheduler.add_job(
-            run_python,  # 指定要执行的函数
-            trigger="interval",  # 使用上面创建的触发器
-            seconds=5,
-            args=[f"{task_path} {config_path}"],  # 指定传递给函数的参数
-            id="task_path",  # 为任务指定一个唯一标识符
+            # 指定要执行的函数
+            quark_auto_task,
+            # 使用上面创建的触发器
+            trigger=trigger,
+            # 指定传递给函数的参数
+            args=[account_list],
+            id="quark",  # 为任务指定一个唯一标识符
         )
         # 根据调度器的当前状态决定是否重新启动或恢复调度器
         if scheduler.state == 0:
@@ -160,11 +164,12 @@ def reload_tasks(task_path, config_path):
         return True
     else:
         # 如果没有获取到crontab，记录日志信息并返回False
-        logging.info(">>> no crontab")
+        logging.info(">>> 没有配置定时任务")
         return False
 
 
 if __name__ == "__main__":
-    # reload_tasks(quark_task, quark_config)
-    app.run(debug=True)
+    scheduler = BackgroundScheduler()
+    reload_tasks("quark")
+    app.run(debug=DEBUG)
     # quark_auto_task()
