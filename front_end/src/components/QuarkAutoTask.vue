@@ -58,36 +58,6 @@
                 </el-icon>
                 <template #title>设置</template>
               </el-menu-item>
-              <el-menu-item index="3">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
-              <el-menu-item index="4">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
-              <el-menu-item index="5">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
-              <el-menu-item index="6">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
-              <el-menu-item index="7">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
             </el-menu>
           </el-scrollbar>
         </el-aside>
@@ -101,9 +71,13 @@
           </el-header>
           <!-- 主要区域 -->
           <el-container>
-            <el-scrollbar height="75vh">
-              <el-main>
+            <el-main>
+              <el-scrollbar height="75vh">
                 <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
+                  <el-form-item label="定时规则">
+                    <el-input v-model="softwareConfig.crontab" clearable placeholder="请输入定时规则">
+                    </el-input>
+                  </el-form-item>
                   <div v-for="(user, index) in softwareConfig.userList" :key="index">
                     <el-form-item :label="'用户' + (softwareConfig.userList[index].name)">
                       <el-button-group>
@@ -144,8 +118,8 @@
                     </el-button>
                   </el-form-item>
                 </el-form>
-              </el-main>
-            </el-scrollbar>
+              </el-scrollbar>
+            </el-main>
 
             <!-- 底栏 -->
             <el-footer>
@@ -184,7 +158,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
 
-let software = "test";
+let software = "quark";
 
 let { softwareConfig, saveSoftConfig, runScriptNow, runTaskAll } = useTaskData(software);
 

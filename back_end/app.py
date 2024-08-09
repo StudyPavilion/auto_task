@@ -25,7 +25,7 @@ test_config = "task_config/test_config.json"
 test_task = "task/test_task.py"
 quark_task = "task/quark_task.py"
 
-DEBUG = False
+DEBUG = True
 
 logging.basicConfig(
     level=logging.DEBUG if DEBUG else logging.INFO,
@@ -48,7 +48,8 @@ def read_config():
         if software == "quark":
             data = read_json(quark_config)
             user_list = data["userList"]
-            return json.dumps(user_list)
+            print(data)
+            return json.dumps(data)
         elif software == "test":
             data = read_json(test_config)
             user_list = data["userList"]
@@ -74,7 +75,7 @@ def save_config():
     if request.method == 'POST':
         save_config_result = {"task_result": "", "log": ""}
         if software == "quark":
-            with open(test_config, "w", encoding="utf-8") as f:
+            with open(quark_config, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=4, ensure_ascii=False, sort_keys=False)
             save_config_result["task_result"] = "success"
             save_config_result["log"] = "保存成功"

@@ -1,12 +1,12 @@
 {
     "software": "quark",
     "userList": [
-    {
-      "name": "quark",
-      "kps": "AASdlyqho8zVXQ4US7krPBSa7XacPrhyjZhFMWZMEE6DzaOXgNCO8MMENeLxEH52suoSqmMgOJ02p1HoGDt4%2BTVXsPCBfKmElYWgqItMvc8lBA%3D%3D",
-      "sign": "AARmhtoyIQTPvQB6JAKWDnomL%2Bs%2B2t4s9AARiQi341AXcJm%2B%2Bk0j1J2Qr7hPeD5HI68%3D",
-      "vcode": "1722327010080"
-    }
-  ],
-  "crontab": "15 8 * * *"
+        {
+            "name": "quark",
+            "kps": "AASdlyqho8zVXQ4US7krPBSa7XacPrhyjZhFMWZMEE6DzaOXgNCO8MMENeLxEH52suoSqmMgOJ02p1HoGDt4%2BTVXsPCBfKmElYWgqItMvc8lBA%3D%3D",
+            "sign": "AARmhtoyIQTPvQB6JAKWDnomL%2Bs%2B2t4s9AARiQi341AXcJm%2B%2Bk0j1J2Qr7hPeD5HI68%3D",
+            "vcode": "1722327010080"
+        }
+    ],
+    "crontab": "16 8 * * *"
 }
