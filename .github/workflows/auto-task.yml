@@ -1,0 +1,35 @@
+name: 自动任务
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  auto-task:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            # 如果你文档需要 Git 子模块，取消注释下一行
+            # submodules: true
+
+        - name: 安装 python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.12.4'
+
+        - name: 切换到后端代码目录
+          run: cd back_end
+        
+        - name: 安装 requirements
+          run: pip3 install -r requirements.txt
+
+        - name: 执行 自动签到任务
+          run: python3 run.py
+
+        
+
+           
+    
