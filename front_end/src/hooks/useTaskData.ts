@@ -24,6 +24,7 @@ interface userList {
 interface softwareConfig {
     software: string;
     userList: userList[],
+    crontab: string,
 }
 
 /**
@@ -39,7 +40,7 @@ interface getSoftwareConfig {
 export default function (software: string) {
     const urlStore = useUrlStore()
     const userList = reactive<userList[]>([])
-    const softwareConfig = reactive<softwareConfig>({ software: '', userList: [] })
+    const softwareConfig = reactive<softwareConfig>({ software: '', userList: [], crontab: '' })
 
     // 方法
     async function getUserList(software: string) {
@@ -84,8 +85,7 @@ export default function (software: string) {
             // 维护数据
             softwareConfig.software = data["software"]
             softwareConfig.userList = data["userList"]
-
-
+            softwareConfig.crontab = data["crontab"]
         } catch (error) {
             // 处理错误
             const err = <AxiosError>error
