@@ -7,7 +7,7 @@ import os
 import sys
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # sys.path.append('..')
-from utils.common import read_json
+from utils.common import read_json, auto_mail_sending
 
 quark_config = "../task_config/quark_config.json"
 
@@ -92,6 +92,18 @@ def quark_auto_task(account):
             sign_results["task_result"] = "error"
             print("夸克盘签到异常", f"{account["name"]} 的签到失败!")
     print("签到汇总", sign_results)
+    # 发送短信
+    email_msg = "自动任务"
+    if sign_results["task_result"] == "success":
+        task_result = "成功\n"
+    elif sign_results["task_result"] == "error":
+        task_result = "失败\n"
+    else:
+        task_result = "未知错误\n"
+    email_msg += task_result
+    for account_name in sign_results["log"]:
+        email_msg += account_name + ":\n" + sign_results.get("log")[account_name] + "\n"
+    auto_mail_sending(email_msg)
     return sign_results
 
 
