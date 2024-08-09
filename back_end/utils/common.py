@@ -72,6 +72,6 @@ def auto_mail_sending(mail_content, from_addr='2298276317@qq.com',
 
 if __name__ == "__main__":
     print("这是common.py")
-    # email_password = os.environ.get("email_password")
-    # print(email_password)
+    EMAIL_PWD = os.environ.get("EMAIL_PWD")
+    print(EMAIL_PWD)
     # auto_mail_sending("测试")
