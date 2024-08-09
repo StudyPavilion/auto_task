@@ -14,7 +14,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from utils.common import read_json, get_os_type, get_python_command
 from task.quark_task import quark_auto_task
 
-
 app = Flask(__name__)
 # 解决跨域问题
 CORS(app)
@@ -75,10 +74,18 @@ def save_config():
     if request.method == 'POST':
         save_config_result = {"task_result": "", "log": ""}
         if software == "quark":
+            crontab = json_data["crontab"]
+            trigger = CronTrigger.from_crontab(crontab)
+            # 先暂停任务，再恢复任务
+            scheduler.pause_job('quark')
+            scheduler.modify_job('quark', trigger=trigger)
+            scheduler.resume_job('quark')
+            # 写入配置
             with open(quark_config, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, indent=4, ensure_ascii=False, sort_keys=False)
             save_config_result["task_result"] = "success"
             save_config_result["log"] = "保存成功"
+
         elif software == "test":
             with open(test_config, "w", encoding="utf-8") as f:
                 # json.dump(json_data, f)
@@ -120,7 +127,7 @@ def reload_tasks(software):
     :return:
     """
     # scheduler = BackgroundScheduler()
-    crontab = None
+    # crontab = None
     # 读取数据
     if software == "quark":
         data = read_json(quark_config)
@@ -131,7 +138,7 @@ def reload_tasks(software):
         return False
     # 如果成功获取到crontab，则继续执行
     if crontab:
-        data = read_json(quark_config)
+        # data = read_json(quark_config)
         account_list = data["userList"]
         # 如果调度器当前处于运行状态，则先暂停调度器
         if scheduler.state == 1:
