@@ -3,9 +3,9 @@ name: 自动任务
 on:
   push:
     branches:
-      - dev
+      - main
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '10 13 * * *'
 
 jobs:
   auto-task:
