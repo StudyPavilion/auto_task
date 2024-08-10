@@ -1,7 +1,7 @@
 name: 自动任务
 
 on:
-  push:
+  # push:
     # branches:
     #   - main
   schedule:
