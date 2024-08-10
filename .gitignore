@@ -1,1 +1,3 @@
 *.pyc
+back_end/task/__pycache__/quark_task.cpython-312.pyc
+back_end/utils/__pycache__/common.cpython-312.pyc
