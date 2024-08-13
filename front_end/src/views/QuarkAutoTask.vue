@@ -4,64 +4,7 @@
 
   <div class="common-layout">
     <el-container>
-      <el-header>
-        <!-- 将顶部菜单固定在顶部 -->
-        <el-affix :offset="0">
-          <el-menu class="el-menu-demo" mode="horizontal" :ellipsis="false" @select="handleSelect">
-            <el-menu-item index="0">
-              <img style="width: 100px" src="/favicon.ico" alt="Element logo" />
-            </el-menu-item>
-
-            <el-menu-item>
-              <div>
-                <el-button type="" @click="toggleSidebarStatus()" style="margin-bottom: 20px">
-                  点我{{ SidebarStatus }}
-                </el-button>
-              </div>
-            </el-menu-item>
-
-            <div class="flex-grow" />
-
-            <el-sub-menu index="1">
-              <template #title>
-                <el-icon>
-                  <user />
-                </el-icon>
-                <span>用户</span>
-              </template>
-              <el-menu-item index="1-1">
-                <span>切换账号</span>
-              </el-menu-item>
-              <el-menu-item index="1-2">
-                <span>退出登录</span>
-              </el-menu-item>
-            </el-sub-menu>
-          </el-menu>
-        </el-affix>
-      </el-header>
       <el-container>
-
-        <!-- 侧栏 -->
-        <el-aside width="120px">
-          <el-scrollbar height="75vh">
-            <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
-              @close="handleClose">
-              <el-menu-item index="1">
-                <el-icon>
-                  <svg-icon class="icon" iconName="icon-kuake"></svg-icon>
-                </el-icon>
-                <template #title>夸克</template>
-              </el-menu-item>
-              <el-menu-item index="2">
-                <el-icon>
-                  <setting />
-                </el-icon>
-                <template #title>设置</template>
-              </el-menu-item>
-            </el-menu>
-          </el-scrollbar>
-        </el-aside>
-
         <el-container label-width="auto" style="min-width: 400px;">
           <!-- 顶栏 -->
           <el-header>
@@ -72,7 +15,7 @@
           <!-- 主要区域 -->
           <el-container>
             <el-main>
-              <el-scrollbar height="75vh">
+              <el-scrollbar height="70vh">
                 <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <el-form-item label="定时规则">
                     <el-input v-model="softwareConfig.crontab" clearable placeholder="请输入定时规则">
@@ -141,22 +84,11 @@
 </template>
 
 <script setup lang="ts" name="QuarkAutoTask">
-import axios from "axios";
 import { reactive, ref } from "vue";
-import { ElMessage } from "element-plus";
 import useTaskData from "@/hooks/useTaskData";
 
 const isCollapse = ref(false);
 let SidebarStatus = ref("折叠侧边栏");
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
 
 let software = "quark";
 
@@ -192,18 +124,16 @@ function addUser() {
 function removeUser(index: number) {
   softwareConfig.userList.splice(index, 1);
 }
-
-function onSubmit() {
-  console.log("submit!");
-  console.log("form.name:",);
-  console.log("form:", softwareConfig.software);
-}
-
 </script>
 
 <style scoped>
 .flex-grow {
   flex-grow: 1;
+}
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .svg-icon {

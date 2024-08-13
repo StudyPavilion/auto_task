@@ -7,6 +7,8 @@ import './assets/iconfont/iconfont.js';
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
+
 
 const app = createApp(App)
 
@@ -21,8 +23,10 @@ app.use(ElementPlus)
 
 app.use(pinia)
 
+// 使用路由器
+app.use(router)
+
 app.component('SvgIcon', SvgIcon);
 
 app.mount('#app')
-
 
