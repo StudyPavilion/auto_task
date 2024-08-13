@@ -128,8 +128,6 @@ export default function (software: string) {
                     });
                 }
             );
-
-
         } catch (error) {
             // 处理错误
             const err = <AxiosError>error
