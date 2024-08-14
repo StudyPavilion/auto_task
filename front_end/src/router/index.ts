@@ -12,25 +12,25 @@ import User from '@/views/User.vue'
 const router = createRouter({
   history: createWebHistory(), //路由器的工作模式（稍后讲解）
   routes: [ //一个一个的路由规则
-    {
-      name:'用户',
-      path:'/:user',
-      component:User,
-      children:[
-        {
-          name:'首页',
-          path:'home',
-          component:Home,
-          meta: { iconType: 'elementPlus', icon: "HomeFilled" },
-        },
-        {
-          name:'quark',
-          path:'quark',
-          component:Quark,
-          meta: { iconType: 'iconfont', icon: "icon-kuake" },
-        }
-      ]
-    },
+    // {
+    //   name:'用户',
+    //   path:'/:user',
+    //   component:User,
+    //   children:[
+    //     {
+    //       name:'首页',
+    //       path:'home',
+    //       component:Home,
+    //       meta: { iconType: 'elementPlus', icon: "HomeFilled" },
+    //     },
+    //     {
+    //       name:'quark',
+    //       path:'quark',
+    //       component:Quark,
+    //       meta: { iconType: 'iconfont', icon: "icon-kuake" },
+    //     }
+    //   ]
+    // },
     {
       name:'主页',
       path:'/',
@@ -49,6 +49,16 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach(to => {
+  const menuStore = useMenuStore()
+  for (const item of menuStore.sideMenu) {
+      console.log("router",item)
+      router.addRoute(item)
+    }
+ 
+  console.log("menuStore.sideMenu",menuStore.sideMenu)
+  // return to.fullPath
+})
 
 // 暴露出去router
 export default router

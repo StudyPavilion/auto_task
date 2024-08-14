@@ -4,24 +4,25 @@ import Home from '@/views/Home.vue'
 import Quark from '@/views/QuarkAutoTask.vue'
 import User from '@/views/User.vue'
 import LogIn from '@/views/LogIn.vue'
+import { markRaw } from 'vue'
 
 export const useMenuStore = defineStore('menu', () => {
     const sideMenu = reactive([
         {
             name:'用户',
             path:'/:user',
-            component:User,
+            component:markRaw(User),
             children:[
               {
                 name:'首页',
                 path:'home',
-                component:Home,
+                component:markRaw(Home),
                 meta: { iconType: 'elementPlus', icon: "HomeFilled" },
               },
               {
                 name:'夸克',
                 path:'quark',
-                component:Quark,
+                component:markRaw(Quark),
                 meta: { iconType: 'iconfont', icon: "icon-kuake" },
               }
             ]
@@ -34,7 +35,7 @@ export const useMenuStore = defineStore('menu', () => {
           {
             name:'登录',
             path:'/login',
-            component:LogIn,
+            component:markRaw(LogIn),
           },
           {
             name:'退出登录',
