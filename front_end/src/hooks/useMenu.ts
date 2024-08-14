@@ -1,3 +1,4 @@
+import router from '@/router';
 import { useMenuStore } from '@/store/menu'
 import { onMounted, reactive, ref } from 'vue'
 
@@ -6,7 +7,8 @@ export default function (){
     const sideMenu = ref([] as any)
     function getMenu(menuType: String) {
         if (menuType === 'sideMenu') {
-            sideMenu.value = menuStore.sideMenu
+            sideMenu.value = menuStore.sideMenu[0].children
+            // sideMenu.value = menuStore.sideMenu
             return menuStore.sideMenu
         }
     }

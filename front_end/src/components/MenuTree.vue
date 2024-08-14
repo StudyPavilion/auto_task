@@ -21,6 +21,7 @@
                     </div>
                 </el-icon>
                 <span>{{ item.name }}</span>
+                <!-- <span>{{ item.path }}</span> -->
             </el-menu-item>
         </template>
     </div>
@@ -29,6 +30,7 @@
 <script setup lang="ts" name="MenuTree">
 
 const props = defineProps(['menuList'])
+console.log("props.menuList:", props.menuList)
 </script>
 
 <style scoped></style>
