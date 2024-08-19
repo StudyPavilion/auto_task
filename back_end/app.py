@@ -1,5 +1,4 @@
 import os
-import sys
 
 from apscheduler.triggers.cron import CronTrigger
 from flask import Flask, request
@@ -11,6 +10,7 @@ import logging
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
+from mysql_config import mysql_init, check_user_exists, mysql_config, connect_mysql, disconnect_mysql, find_user_info
 from utils.common import read_json, get_os_type, get_python_command
 from task.quark_task import quark_auto_task
 
@@ -24,6 +24,8 @@ test_config = "task_config/test_config.json"
 test_task = "task/test_task.py"
 quark_task = "task/quark_task.py"
 
+scheduler = BackgroundScheduler()
+
 DEBUG = True
 
 logging.basicConfig(
@@ -36,6 +38,39 @@ logging.basicConfig(
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Hello World!'
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return "不支持GET请求，请使用POST进行请求"
+    elif request.method == 'POST':
+        login_result = {"login_result": "", "log": ""}
+        json_data = request.get_json()
+        user_name = json_data.get('account')
+        password = json_data.get('password')
+        logging.info("user_name:{}, password:{}".format(user_name, password))
+
+        data = read_json(mysql_config)
+        connect_config = data.get("connect_config")
+        cnx = connect_mysql(connect_config)
+        user_info = find_user_info(cnx, user_name, field='password')
+        logging.info("user_info:{}".format(user_info))
+        if user_info:
+            db_password = user_info[0]
+            if password == db_password:
+                login_result["login_result"] = "success"
+                login_result["log"] = "登录成功"
+            else:
+                login_result["login_result"] = "error"
+                login_result["log"] = "密码错误"
+        else:
+            login_result["login_result"] = "error"
+            login_result["log"] = "用户不存在"
+        disconnect_mysql(cnx)
+        return login_result
+    else:
+        return "未知请求，请使用POST进行请求"
 
 
 @app.route('/read_config/', methods=['GET', 'POST'])
@@ -126,9 +161,6 @@ def reload_tasks(software):
     重载任务调度器
     :return:
     """
-    # scheduler = BackgroundScheduler()
-    # crontab = None
-    # 读取数据
     if software == "quark":
         data = read_json(quark_config)
         # 尝试从数据中获取名为"crontab"的键对应的值
@@ -176,8 +208,11 @@ def reload_tasks(software):
         return False
 
 
-if __name__ == "__main__":
-    scheduler = BackgroundScheduler()
+def main():
+    mysql_init()
     reload_tasks("quark")
     app.run(debug=DEBUG)
-    # quark_auto_task()
+
+
+if __name__ == "__main__":
+    main()

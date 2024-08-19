@@ -3,6 +3,9 @@ import { ref } from 'vue'
 
 export const useUrlStore = defineStore('url', () => {
     const urlBase = ref("http://127.0.0.1:5000");
+
+    const urlLogin = ref(urlBase.value + "/login");
+
     // 运行任务
     const urlRunTask = ref(urlBase.value + "/run_task");
 
@@ -10,5 +13,5 @@ export const useUrlStore = defineStore('url', () => {
 
     const urlSaveConfig = ref(urlBase.value + "/save_config");
 
-    return { urlBase, urlRunTask, urlReadConfig, urlSaveConfig, }
+    return { urlBase, urlLogin, urlRunTask, urlReadConfig, urlSaveConfig, }
 })

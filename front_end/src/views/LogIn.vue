@@ -5,19 +5,19 @@
                 <h1>登录</h1>
             </el-header>
             <el-main>
-                <el-form :model="form" label-width="auto" style="min-width: 600px">
+                <el-form :model="loginData" label-width="auto" style="min-width: 600px">
                     <el-form-item label="账户">
-                        <el-input v-model="form.account" />
+                        <el-input v-model="loginData.account" />
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="form.password" />
+                        <el-input v-model="loginData.password" />
                     </el-form-item>
                 </el-form>
             </el-main>
             <el-footer>
                 <el-row justify="center">
-                    <el-button type="success" @click="onSubmit">登录</el-button>
-                    <el-button type="primary" @click="onSubmit">注册</el-button>
+                    <el-button type="success" @click="login">登录</el-button>
+                    <el-button type="primary" @click="login">注册</el-button>
                 </el-row>
             </el-footer>
         </el-container>
@@ -26,20 +26,22 @@
 
 
 <script setup lang="ts" name="LogIn">
+import useLogin from '@/hooks/useLogin';
 import router from '@/router';
 import { reactive } from 'vue';
 
 
-const form = reactive({
+const loginData = reactive({
     account: '',
     password: '',
 })
 
 const onSubmit = () => {
-    const path = form.account + '/'
+    const path = loginData.account + '/home'
     console.log(path)
     router.replace({ path: path })
 }
+let { login } = useLogin(loginData);
 
 </script>
 
