@@ -1,0 +1,19 @@
+{
+  "config": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "123456",
+        "charset": "utf8"
+    },
+  "tables": {
+        "user": "create table if not exists `user` (`user_name` varchar(32), `password` varchar(32) not null,`email` varchar(32),`vip` boolean  not null default false,primary key (`user_name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+    },
+    "data_users": [
+        {
+            "user_name": "admin",
+            "password": "admin",
+            "email": "1",
+            "vip": 1
+        }
+    ]
+}
