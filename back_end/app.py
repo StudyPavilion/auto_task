@@ -3,15 +3,14 @@ import os
 from apscheduler.triggers.cron import CronTrigger
 from flask import Flask, request
 from flask_cors import CORS
-import time
-import requests
 import json
 import logging
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from mysql_config import mysql_init, check_user_exists, mysql_config, connect_mysql, disconnect_mysql, find_user_info
-from utils.common import read_json, get_os_type, get_python_command
+from mysql_config import mysql_init,  mysql_config, connect_mysql, disconnect_mysql, find_user_info, \
+    add_users
+from utils.common import read_json, get_python_command
 from task.quark_task import quark_auto_task
 
 app = Flask(__name__)
@@ -23,6 +22,9 @@ test_config = "task_config/test_config.json"
 
 test_task = "task/test_task.py"
 quark_task = "task/quark_task.py"
+
+mysql_config_data = read_json(mysql_config)
+connect_config = mysql_config_data.get("connect_config")
 
 scheduler = BackgroundScheduler()
 
@@ -51,8 +53,6 @@ def login():
         password = json_data.get('password')
         logging.info("user_name:{}, password:{}".format(user_name, password))
 
-        data = read_json(mysql_config)
-        connect_config = data.get("connect_config")
         cnx = connect_mysql(connect_config)
         user_info = find_user_info(cnx, user_name, field='password')
         logging.info("user_info:{}".format(user_info))
@@ -67,6 +67,42 @@ def login():
         else:
             login_result["login_result"] = "error"
             login_result["log"] = "用户不存在"
+        disconnect_mysql(cnx)
+        return login_result
+    else:
+        return "未知请求，请使用POST进行请求"
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return "不支持GET请求，请使用POST进行请求"
+    elif request.method == 'POST':
+        user_list = []
+        login_result = {"register_result": "", "log": ""}
+        json_data = request.get_json()
+        json_data["vip"] = 0
+        user_list.append(json_data)
+        logging.info("user_list:{}".format(user_list))
+        user_name = json_data.get('account')
+        password = json_data.get('password')
+        email = json_data.get('email')
+        logging.info("user_name:{}, password:{}, email:{}".format(user_name, password, email))
+
+        cnx = connect_mysql(connect_config)
+        user_info = find_user_info(cnx, user_name, field='user_name')
+        logging.info("user_info:{}".format(user_info))
+        if user_info:
+            login_result["register_result"] = "error"
+            login_result["log"] = "该用户已被注册，请登录"
+        else:
+            logging.info("正在创建用户：{}".format(user_name))
+            if add_users(cnx, user_list):
+                login_result["register_result"] = "success"
+                login_result["log"] = "注册成功"
+            else:
+                login_result["register_result"] = "error"
+                login_result["log"] = "注册失败"
         disconnect_mysql(cnx)
         return login_result
     else:
@@ -100,7 +136,6 @@ def read_config():
 
 @app.route('/save_config', methods=['GET', 'POST'])
 def save_config():
-    save_config_result = {}
     print(request.method)
     json_data = request.get_json()
     print(json_data)

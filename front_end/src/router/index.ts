@@ -8,43 +8,49 @@ import Home from '@/views/Home.vue'
 import Quark from '@/views/QuarkAutoTask.vue'
 import LogIn from '@/views/LogIn.vue'
 import User from '@/views/User.vue'
+import Register from '@/views/Register.vue'
 // 第二步：创建路由器
 const router = createRouter({
   history: createWebHistory(), //路由器的工作模式（稍后讲解）
   routes: [ //一个一个的路由规则
     {
-      name:'用户',
-      path:'/:user',
-      component:User,
-      children:[
+      name: '用户',
+      path: '/:user',
+      component: User,
+      children: [
         {
-          name:'首页',
-          path:'home',
-          component:Home,
+          name: '首页',
+          path: 'home',
+          component: Home,
           meta: { iconType: 'elementPlus', icon: "HomeFilled" },
         },
         {
-          name:'quark',
-          path:'quark',
-          component:Quark,
+          name: 'quark',
+          path: 'quark',
+          component: Quark,
           meta: { iconType: 'iconfont', icon: "icon-kuake" },
         }
       ]
     },
     {
-      name:'主页',
-      path:'/',
-      redirect:'/login'
+      name: '主页',
+      path: '/',
+      redirect: '/login'
     },
     {
-      name:'登录',
-      path:'/login',
-      component:LogIn,
+      name: '登录',
+      path: '/login',
+      component: LogIn,
     },
     {
-      name:'退出登录',
-      path:'/log_out',
-      redirect:'/login'
+      name: '注册',
+      path: '/register',
+      component: Register,
+    },
+    {
+      name: '退出登录',
+      path: '/log_out',
+      redirect: '/login'
     },
   ]
 })

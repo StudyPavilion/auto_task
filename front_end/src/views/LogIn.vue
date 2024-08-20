@@ -17,7 +17,7 @@
             <el-footer>
                 <el-row justify="center">
                     <el-button type="success" @click="login">登录</el-button>
-                    <el-button type="primary" @click="login">注册</el-button>
+                    <el-button type="primary" @click="toRegister">去注册</el-button>
                 </el-row>
             </el-footer>
         </el-container>
@@ -42,6 +42,10 @@ const onSubmit = () => {
     router.replace({ path: path })
 }
 let { login } = useLogin(loginData);
+
+function toRegister() {
+    router.replace('/register');
+}
 
 </script>
 

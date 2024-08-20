@@ -66,6 +66,7 @@ def create_table(cnx, tables, db_name="auto_task"):
 
 
 def add_users(cnx, users, db_name="auto_task"):
+    logging.info("users: {}".format(users))
     cursor = cnx.cursor()
     cursor.execute("use {};".format(db_name))
     add_user = ("insert into user "
