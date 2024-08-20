@@ -3,7 +3,7 @@
     <div class="common-layout">
         <el-container>
             <el-header>
-                <h1>登录</h1>
+                <h1>注册</h1>
             </el-header>
             <el-main>
                 <el-form :model="registerData" label-width="auto" style="min-width: 600px">

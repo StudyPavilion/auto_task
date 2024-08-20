@@ -17,7 +17,7 @@
               <el-menu-item index="switch_account">
                 <span>切换账号</span>
               </el-menu-item>
-              <el-menu-item index="log_out">
+              <el-menu-item index="/login">
                 <span>退出登录</span>
               </el-menu-item>
             </el-sub-menu>
