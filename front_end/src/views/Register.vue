@@ -30,7 +30,8 @@
             </el-main>
             <el-footer>
                 <el-row justify="center">
-                    <el-button type="primary" @click="register">立即注册</el-button>
+                    <el-button type="primary" @click="register()">立即注册</el-button>
+                    <el-button type="primary" @click="toLogin()">去登录</el-button>
                 </el-row>
             </el-footer>
         </el-container>
@@ -39,6 +40,7 @@
 
 <script setup lang="ts" name="Register">
 import useRegister from '@/hooks/useRegister';
+import router from '@/router';
 import { reactive } from 'vue';
 
 const registerData = reactive({
@@ -49,6 +51,10 @@ const registerData = reactive({
 })
 
 let { register, getCode} = useRegister(registerData);
+
+function toLogin() {
+    router.replace('/login');
+}
 
 </script>
 
