@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import random
 import sys
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -68,6 +69,13 @@ def auto_mail_sending(mail_content, from_addr='2298276317@qq.com',
 
     # quit():用于结束SMTP会话。
     smtp.quit()
+    return True
+
+
+def generate_random_number(digits):
+    min_value = 10 ** (digits - 1)  # 最小值为10的(digits - 1)次方
+    max_value = (10 ** digits) - 1  # 最大值为10的digits次方减1
+    return random.randint(min_value, max_value)
 
 
 if __name__ == "__main__":

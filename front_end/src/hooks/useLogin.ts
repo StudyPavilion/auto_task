@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useUrlStore } from '@/store/url'
-import { ElMessage, ElNotification } from "element-plus";
+import { ElNotification } from "element-plus";
 import router from "@/router";
 
 /**

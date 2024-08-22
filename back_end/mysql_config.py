@@ -76,7 +76,7 @@ def add_users(cnx, users, db_name="auto_task"):
         for user in users:
             cursor.execute(add_user, user)
             cnx.commit()
-            logging.info("User {} added successfully".format(user.get("user_name")))
+            logging.info("用户 {} 注册成功".format(user.get("user_name")))
             return True
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_DUP_ENTRY:

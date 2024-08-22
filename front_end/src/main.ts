@@ -8,6 +8,7 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import axios from 'axios';
 
 
 const app = createApp(App)
@@ -27,6 +28,10 @@ app.use(pinia)
 app.use(router)
 
 app.component('SvgIcon', SvgIcon);
+
+axios.defaults.withCredentials = true; // 发送凭据
+axios.defaults.xsrfCookieName = 'session:'; // 以‘session:’识别会话
+
 
 app.mount('#app')
 

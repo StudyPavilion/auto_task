@@ -16,6 +16,16 @@
                     <el-form-item label="电子邮箱">
                         <el-input v-model="registerData.email" />
                     </el-form-item>
+                    <el-form-item label="验证码">
+                        <el-row>
+                            <el-col :span="12">
+                                <el-input v-model="registerData.code" />
+                            </el-col>
+                            <el-col :span="12">
+                                <el-button type="primary" @click="getCode()">获取验证码</el-button>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
                 </el-form>
             </el-main>
             <el-footer>
@@ -34,13 +44,12 @@ import { reactive } from 'vue';
 const registerData = reactive({
     user_name: '',
     password: '',
-    email: ''
+    email: '',
+    code: ''
 })
 
-let { register } = useRegister(registerData);
+let { register, getCode} = useRegister(registerData);
 
 </script>
 
-<style scoped>
-    
-</style>
+<style scoped></style>

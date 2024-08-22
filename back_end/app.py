@@ -1,21 +1,31 @@
 import os
+from datetime import timedelta
 
 from apscheduler.triggers.cron import CronTrigger
-from flask import Flask, request
+from flask import Flask, request, session
+from flask_session import Session
 from flask_cors import CORS
 import json
 import logging
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from redis import Redis
 
-from mysql_config import mysql_init,  mysql_config, connect_mysql, disconnect_mysql, find_user_info, \
+from mysql_config import mysql_init, mysql_config, connect_mysql, disconnect_mysql, find_user_info, \
     add_users
-from utils.common import read_json, get_python_command
+from utils.common import read_json, get_python_command, generate_random_number, auto_mail_sending
 from task.quark_task import quark_auto_task
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'StudyPavilion'
+# SESSION_TYPE = 'redis'
+# SESSION_REDIS = Redis(host='localhost', port=6379)
+# app.config.from_object(__name__)
+# Session(app)
 # 解决跨域问题
-CORS(app)
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 配置7天有效
+CORS(app, supports_credentials=True)
 
 quark_config = "task_config/quark_config.json"
 test_config = "task_config/test_config.json"
@@ -84,9 +94,17 @@ def register():
         json_data["vip"] = 0
         user_list.append(json_data)
         logging.info("user_list:{}".format(user_list))
-        user_name = json_data.get('account')
+        user_name = json_data.get('user_name')
         password = json_data.get('password')
         email = json_data.get('email')
+        code = json_data.get('code')
+        logging.info('code:{}, session[email]: {}'.format(code, session.get('email')))
+        logging.info("session['email']: {}".format(session.get('email')))
+        logging.info("type(code):{}, type(session.get('email')):{}".format(type(code), type(session.get('email'))))
+        if code != session.get('email'):
+            login_result["register_result"] = "error"
+            login_result["log"] = "验证码错误"
+            return login_result
         logging.info("user_name:{}, password:{}, email:{}".format(user_name, password, email))
 
         cnx = connect_mysql(connect_config)
@@ -107,6 +125,29 @@ def register():
         return login_result
     else:
         return "未知请求，请使用POST进行请求"
+
+
+@app.route('/get_code', methods=['GET', 'POST'])
+def get_code():
+    if request.method == 'GET':
+        email = request.args.get("email")
+        logging.info("email:{}".format(email))
+        get_code_result = {"get_code_result": "", "log": ""}
+        code = generate_random_number(6)
+        session['email'] = str(code)
+        logging.info("session['email']: {}".format(session.get('email')))
+        mail_content = "您的验证码是：{}, \n 五分钟内有效".format(code)
+        if auto_mail_sending(mail_content, to_addr=email):
+            get_code_result["get_code_result"] = "success"
+            get_code_result["log"] = "验证码发送成功"
+        else:
+            get_code_result["get_code_result"] = "error"
+            get_code_result["log"] = "验证码发送失败"
+        return get_code_result
+    elif request.method == 'POST':
+        return "不支持POST请求，请使用GET进行请求"
+    else:
+        return "请使用GET进行请求"
 
 
 @app.route('/read_config/', methods=['GET', 'POST'])
@@ -246,7 +287,7 @@ def reload_tasks(software):
 def main():
     mysql_init()
     reload_tasks("quark")
-    app.run(debug=DEBUG)
+    app.run(host='0.0.0.0', port=5000, debug=DEBUG)
 
 
 if __name__ == "__main__":
