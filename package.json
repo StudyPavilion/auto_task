@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
   }
 }

@@ -3,6 +3,9 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import SvgIcon from './components/SvgIcon.vue'
 import './assets/iconfont/iconfont.js';
+import "tailwindcss/tailwind.css";
+
+
 /* 引入createPinia，用于创建pinia */
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'

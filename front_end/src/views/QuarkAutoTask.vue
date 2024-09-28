@@ -16,7 +16,7 @@
           <el-container>
             <el-main>
               <el-scrollbar height="70vh">
-                <el-form :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
+                <el-form  label-width="auto" :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <el-form-item label="定时规则">
                     <el-input v-model="softwareConfig.crontab" clearable placeholder="请输入定时规则">
                     </el-input>
@@ -30,7 +30,7 @@
                           </el-icon>
                           <span style="vertical-align: middle">立即执行</span>
                         </el-button>
-
+                        
                         <el-button type="danger" @click="removeUser(index)">
                           <el-icon style="vertical-align: middle">
                             <Delete />

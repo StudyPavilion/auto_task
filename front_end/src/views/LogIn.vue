@@ -1,27 +1,60 @@
 <template>
-    <div class="common-layout">
-        <el-container>
-            <el-header>
-                <h1>登录</h1>
-            </el-header>
-            <el-main>
-                <el-form :model="loginData" label-width="auto" style="min-width: 600px">
-                    <el-form-item label="账户">
-                        <el-input v-model="loginData.account" />
-                    </el-form-item>
-                    <el-form-item label="密码">
-                        <el-input v-model="loginData.password" />
-                    </el-form-item>
-                </el-form>
-            </el-main>
-            <el-footer>
-                <el-row justify="center">
-                    <el-button type="success" @click="login()">登录</el-button>
-                    <el-button type="primary" @click="toRegister()">去注册</el-button>
-                    <el-button type="primary" @click="guestLogin()">游客登录</el-button>
-                </el-row>
-            </el-footer>
-        </el-container>
+    <div>
+        <div class="grid grid-cols-6 h-screen bg-white">
+            <!-- 左边栏 -->
+            <div class="col-span-6 md:col-span-3 sm:col-span-6">
+                <div class="login-container-left flex justify-center items-center flex-col">
+                    <div class="items-center flex flex-col animate-fade-right">
+                        <h2 class="font-bold text-4xl mb-7 ">自动任务 登录</h2>
+                        <p class="text-white">自动执行任务平台，解放双手，轻松工作！</p>
+                        <img src="@/assets/images/developer.png" class="login-image">
+                    </div>
+                </div>
+            </div>
+            <!-- 右边栏 -->
+            <div class=" col-span-6 px-3 md:col-span-3 sm:col-span-6">
+                <div class="login-container-right flex justify-center items-center flex-col ">
+                    <h2 class="animate-fade-left font-bold text-3xl text-gray-800 mt-5">欢迎回来</h2>
+                    <div class="animate-fade-left flex items-center justify-center my-5 text-gray-400 space-x-2">
+                        <span class="h-[1px] w-16 bg-gray-200"></span>
+                        <span>账号密码登录</span>
+                        <span class="h-[1px] w-16 bg-gray-200"></span>
+                    </div>
+                    <div class="animate-fade-left">
+                        <el-form ref="formRef" :rules="rules" :model="loginData" class="w-[300px]">
+                            <el-form-item prop="username">
+                                <el-input v-model="loginData.account" prefix-icon="User" placeholder="请输入用户名" size="large"
+                                    clearable />
+                            </el-form-item>
+                            <el-form-item prop="password">
+                                <el-input v-model="loginData.password" type="password" autocomplete="off" prefix-icon="Lock"
+                                    placeholder="请输入密码" show-password size="large" clearable />
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button round type="primary" @click="login()" :loading="loading"
+                                    class="w-[300px] mt-4" size="large">
+                                    登 录
+                                </el-button>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button round type="primary" @click="toRegister()" :loading="loading"
+                                    class="w-[300px] mt-4" size="large">
+                                    注 册
+                                </el-button>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button round type="primary" @click="guestLogin()" :loading="loading"
+                                    class="w-[300px] mt-4" size="large">
+                                    游客登录
+                                </el-button>
+                            </el-form-item>
+
+                        </el-form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -29,7 +62,7 @@
 <script setup lang="ts" name="LogIn">
 import useLogin from '@/hooks/useLogin';
 import router from '@/router';
-import { reactive } from 'vue';
+import { ref, onMounted, onBeforeUnmount, reactive } from 'vue';
 
 
 const loginData = reactive({
@@ -52,12 +85,104 @@ function guestLogin() {
     router.replace({ path: newPath })
 }
 
+const rules = {
+    username: [
+        {
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+        }
+    ],
+    password: [
+        {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur',
+        },
+    ]
+}
+
+
+const formRef = ref(null)
+const loading = ref(false)
+
+// const onSubmit = () => {
+//   // 登录表单验证
+//   formRef.value.validate((valid) => {
+//     if (!valid) {
+//       console.log('验证不通过')
+//       return false
+//     }
+//     loading.value = true
+//     login(form.username, form.password)
+//       .then(res => {
+//         if (res.success == true) {
+//           // 提示成功
+//           let message = res.message
+//           showMessage('登录成功', 'success')
+//           // notification('登录成功')
+
+//           let token = res.data.token
+//           // 存储 token
+//           setToken(token)
+
+//           // 跳转到后台页面
+//           router.push('/admin')
+//         } else {
+//           let message = res.message
+//           showMessage(message, 'error')
+//         }
+//       }).finally(() => {
+//         loading.value = false
+//       })
+//   })
+// }
+
+function onKeyUp(e) {
+    console.log(e)
+    if (e.key == 'Enter') {
+        login()
+    }
+}
+
+// 添加键盘监听
+onMounted(() => {
+    console.log('添加键盘监听')
+    document.addEventListener('keyup', onKeyUp)
+})
+
+// 移除键盘监听
+onBeforeUnmount(() => {
+    document.removeEventListener('keyup', onKeyUp)
+})
+
 </script>
 
 <style scoped>
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+:deep([type='text']:focus) {
+    border-color: transparent !important;
+}
+
+.login-container {
+    height: 100vh;
+    width: 100%;
+    background-color: #fff;
+}
+
+.login-container-left {
+    height: 100%;
+    background: #001428;
+    color: #fff;
+}
+
+.login-container-right {
+    height: 100%;
+}
+
+.login-image {
+    /* max-width: 500px;
+    height: auto; */
+    height: 450px;
 }
 </style>

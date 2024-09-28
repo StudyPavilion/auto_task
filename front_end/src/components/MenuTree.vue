@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="menu-tree">
         <template v-for="item in props.menuList" :key="item.path">
             <!-- {{ item }} -->
             <!--      分为两种方式渲染：有子菜单和没有子菜单-->
@@ -33,4 +33,8 @@ const props = defineProps(['menuList'])
 console.log("props.menuList:", props.menuList)
 </script>
 
-<style scoped></style>
+<style scoped>
+span, .svg-icon, .el-icon {
+    font-size: 25px;
+}
+</style>

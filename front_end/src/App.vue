@@ -1,11 +1,8 @@
 <template>
   <!-- <QuarkAutoTask></QuarkAutoTask> -->
   <!-- <test></test> -->
-  <el-container>
-    <el-main>
-      <RouterView></RouterView>
-    </el-main>
-  </el-container>
+  <RouterView></RouterView>
+
 
 </template>
 
