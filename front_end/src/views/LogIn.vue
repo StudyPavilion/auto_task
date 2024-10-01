@@ -86,7 +86,7 @@ function guestLogin() {
 }
 
 const rules = {
-    username: [
+    account: [
         {
             required: true,
             message: '用户名不能为空',
@@ -106,39 +106,7 @@ const rules = {
 const formRef = ref(null)
 const loading = ref(false)
 
-// const onSubmit = () => {
-//   // 登录表单验证
-//   formRef.value.validate((valid) => {
-//     if (!valid) {
-//       console.log('验证不通过')
-//       return false
-//     }
-//     loading.value = true
-//     login(form.username, form.password)
-//       .then(res => {
-//         if (res.success == true) {
-//           // 提示成功
-//           let message = res.message
-//           showMessage('登录成功', 'success')
-//           // notification('登录成功')
-
-//           let token = res.data.token
-//           // 存储 token
-//           setToken(token)
-
-//           // 跳转到后台页面
-//           router.push('/admin')
-//         } else {
-//           let message = res.message
-//           showMessage(message, 'error')
-//         }
-//       }).finally(() => {
-//         loading.value = false
-//       })
-//   })
-// }
-
-function onKeyUp(e) {
+function onKeyUp(e :any) {
     console.log(e)
     if (e.key == 'Enter') {
         login()

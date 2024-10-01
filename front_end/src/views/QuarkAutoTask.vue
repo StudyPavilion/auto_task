@@ -16,7 +16,7 @@
           <el-container>
             <el-main>
               <el-scrollbar height="70vh">
-                <el-form  label-width="auto" :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
+                <el-form size="large" label-width="auto" :model="softwareConfig" @submit.prevent="saveSoftConfig(softwareConfig)">
                   <el-form-item label="定时规则">
                     <el-input v-model="softwareConfig.crontab" clearable placeholder="请输入定时规则">
                     </el-input>
@@ -136,6 +136,10 @@ header {
   align-items: center;
 }
 
+:deep(.el-form-it)em__label {  
+  font-size: 25px; /* 更改字体大小 */  
+  /* 你可以在这里添加更多的样式 */  
+}  
 .svg-icon {
   width: 18px;
   height: 18px;

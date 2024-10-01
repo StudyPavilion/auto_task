@@ -88,6 +88,8 @@ def register():
     if request.method == 'GET':
         return "不支持GET请求，请使用POST进行请求"
     elif request.method == 'POST':
+        session_id = request.cookies.get(app.config['SESSION_COOKIE_NAME'])
+        print('register Session ID:', session_id)
         user_list = []
         login_result = {"register_result": "", "log": ""}
         json_data = request.get_json()
@@ -135,6 +137,8 @@ def get_code():
         get_code_result = {"get_code_result": "", "log": ""}
         code = generate_random_number(6)
         session['email'] = str(code)
+        session_id = request.cookies.get(app.config['SESSION_COOKIE_NAME'])
+        print('get_code Session ID:', session_id)
         logging.info("session['email']: {}".format(session.get('email')))
         mail_content = "您的验证码是：{}, \n 五分钟内有效".format(code)
         if auto_mail_sending(mail_content, to_addr=email):

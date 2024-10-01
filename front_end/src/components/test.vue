@@ -1,103 +1,162 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
-    <el-radio-group v-model="size" aria-label="size control">
-      <el-radio-button value="large">large</el-radio-button>
-      <el-radio-button value="default">default</el-radio-button>
-      <el-radio-button value="small">small</el-radio-button>
-    </el-radio-group>
-    <el-radio-group v-model="labelPosition" aria-label="position control">
-      <el-radio-button value="left">Left</el-radio-button>
-      <el-radio-button value="right">Right</el-radio-button>
-      <el-radio-button value="top">Top</el-radio-button>
-    </el-radio-group>
+    <div class="grid grid-cols-6 h-screen bg-white">
+      <!-- 左边栏 -->
+      <div class="col-span-6 md:col-span-3 sm:col-span-6">
+        <div class="login-container-left flex justify-center items-center flex-col">
+          <div class="items-center flex flex-col animate-fade-right">
+            <h2 class="font-bold text-4xl mb-7 ">自动任务 登录</h2>
+            <p class="text-white">自动执行任务平台，解放双手，轻松工作！</p>
+            <img src="@/assets/images/developer.png" class="login-image">
+          </div>
+        </div>
+      </div>
+      <!-- 右边栏 -->
+      <div class=" col-span-6 px-3 md:col-span-3 sm:col-span-6">
+        <div class="login-container-right flex justify-center items-center flex-col ">
+          <h2 class="animate-fade-left font-bold text-3xl text-gray-800 mt-5">注册</h2>
+          <div class="animate-fade-left flex items-center justify-center my-5 text-gray-400 space-x-2">
+            <span class="h-[1px] w-16 bg-gray-200"></span>
+            <span>电子邮箱注册</span>
+            <span class="h-[1px] w-16 bg-gray-200"></span>
+          </div>
+          <div class="animate-fade-left">
+            <el-form ref="formRef" :rules="rules" :model="registerData" class="w-[300px]">
+              <el-form-item prop="username">
+                <el-input v-model="registerData.user_name" prefix-icon="User" placeholder="请输入用户名" size="large" clearable />
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input v-model="registerData.password" type="password" autocomplete="off" prefix-icon="Lock"
+                  placeholder="请输入密码" show-password size="large" clearable />
+              </el-form-item>
+              <el-form-item>
+                <el-input v-model="registerData.email" placeholder="请输入电子邮箱">
+                  <template #append>
+                    <el-select v-model="emailType" style="width: 120px">
+                      <el-option label="@qq.com" value="@qq.com" />
+                      <el-option label="@163.com" value="@163.com" />
+                    </el-select>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="code">
+                <div class="grid grid-cols-5 gap-2">
+                  <el-input class="col-span-3" v-model="registerData.code" size="large" autocomplete="off"
+                    placeholder="请输入验证码" />
+                  <el-button class="col-span-2" type="primary" size="large" @click="getCode()">获取验证码</el-button>
+                </div>
+              </el-form-item>
+              <el-form-item>
+                <el-button round type="primary" @click="register()" :loading="loading" class="w-[300px] mt-4"
+                  size="large">
+                  注 册
+                </el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button round type="primary" @click="toLogin()" :loading="loading" class="w-[300px] mt-4" size="large">
+                  去 登 录
+                </el-button>
+              </el-form-item>
+
+            </el-form>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
-  <br />
-  <el-form
-    style="max-width: 600px"
-    :model="sizeForm"
-    label-width="auto"
-    size="large"
-  >
-    <el-form-item label="Activity name">
-      <el-input v-model="sizeForm.name" />
-    </el-form-item>
-    <el-form-item label="Activity zone">
-      <el-select
-        v-model="sizeForm.region"
-        placeholder="please select your zone"
-      >
-        <el-option label="Zone one" value="shanghai" />
-        <el-option label="Zone two" value="beijing" />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="Activity time">
-      <el-col :span="11">
-        <el-date-picker
-          v-model="sizeForm.date1"
-          type="date"
-          aria-label="Pick a date"
-          placeholder="Pick a date"
-          style="width: 100%"
-        />
-      </el-col>
-      <el-col class="text-center" :span="1" style="margin: 0 0.5rem">-</el-col>
-      <el-col :span="11">
-        <el-time-picker
-          v-model="sizeForm.date2"
-          aria-label="Pick a time"
-          placeholder="Pick a time"
-          style="width: 100%"
-        />
-      </el-col>
-    </el-form-item>
-    <el-form-item label="Activity type">
-      <el-checkbox-group v-model="sizeForm.type">
-        <el-checkbox-button value="Online activities" name="type">
-          Online activities
-        </el-checkbox-button>
-        <el-checkbox-button value="Promotion activities" name="type">
-          Promotion activities
-        </el-checkbox-button>
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item label="Resources">
-      <el-radio-group v-model="sizeForm.resource">
-        <el-radio border value="Sponsor">Sponsor</el-radio>
-        <el-radio border value="Venue">Venue</el-radio>
-      </el-radio-group>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button>Cancel</el-button>
-    </el-form-item>
-  </el-form>
 </template>
 
-<script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import type { ComponentSize, FormProps } from 'element-plus'
 
-const size = ref<ComponentSize>('default')
-const labelPosition = ref<FormProps['labelPosition']>('right')
+<script setup lang="ts" name="LogIn">
+import router from '@/router';
+import { ref, onMounted, onBeforeUnmount, reactive } from 'vue';
 
-const sizeForm = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
+let emailType = ref('@qq.com')
+
+
+const formRef = ref(null)
+const loading = ref(false)
+
+import useRegister from '@/hooks/useRegister';
+
+const registerData = reactive({
+  user_name: '',
+  password: '',
+  email: '',
+  code: '',
+  emailType
 })
 
-function onSubmit() {
-  console.log('submit!')
+const rules = {
+  user_name: [
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '密码不能为空',
+      trigger: 'blur',
+    },
+  ],
+  confirmPassword: [
+    {
+      required: true,
+      message: '确认密码不能为空',
+      trigger: 'blur',
+    },
+  ],
+  email: [
+    {
+      required: true,
+      message: '邮箱不能为空',
+      trigger: 'blur',
+    },
+  ],
+  code: [
+    {
+      required: true,
+      message: '验证码不能为空',
+      trigger: 'blur',
+    },
+  ],
+}
+
+let { register, getCode } = useRegister(registerData);
+function toLogin() {
+    router.replace('/login');
 }
 </script>
 
-<style>
-.el-radio-group {
-  margin-right: 12px;
+<style scoped>
+:deep([type='text']:focus) {
+  border-color: transparent !important;
+}
+
+.login-container {
+  height: 100vh;
+  width: 100%;
+  background-color: #fff;
+}
+
+.login-container-left {
+  height: 100%;
+  background: #001428;
+  color: #fff;
+}
+
+.login-container-right {
+  height: 100%;
+}
+
+.login-image {
+  /* max-width: 500px;
+  height: auto; */
+  height: 450px;
 }
 </style>

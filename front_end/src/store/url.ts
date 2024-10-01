@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useUrlStore = defineStore('url', () => {
-    const urlBase = ref("http://127.0.0.1:5000");
+    // const urlBase = ref("http://127.0.0.1:5000");
+    const urlBase = ref("/api");
 
     const urlLogin = ref(urlBase.value + "/login");
 

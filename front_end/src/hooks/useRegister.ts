@@ -15,6 +15,7 @@ interface registerData {
     password: string;
     email: string;
     code: string;
+    emailType: string;
 }
 
 export default function (registerData: registerData) {
@@ -65,12 +66,13 @@ export default function (registerData: registerData) {
     }
     async function getCode() {
         console.log(registerData.email)
+        console.log(registerData.emailType)
         try {
             await axios({
                 method: 'get',
                 url: urlStore.urlGetCode,
                 params: {
-                    email: registerData.email
+                    email: registerData.email + registerData.emailType,
                 },
                 // withCredentials: true
             }).then(
